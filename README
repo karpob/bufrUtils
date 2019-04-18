@@ -1,0 +1,5 @@
+Scripts
+1. catBufr.py -- will cat groups of bufr files into 6hr windows for specified time range.
+2. collapse.sh -- collapses directory, and dumps all files into a single directory.
+3. eccode_install.txt -- How to install eccodes, so you can investigate contents of bufr files easily. 
+
