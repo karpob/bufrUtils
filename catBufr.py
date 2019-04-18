@@ -37,14 +37,16 @@ def go ( a ):
         startTimes.append( dt - timedelta(hours=3) )
         endTimes.append( dt + timedelta(hours=3) )
 
-    # 
+    # Loop through the files you want to make, and cat together little BUFR files.  
     for i,fs in enumerate(filesToMake):
         print("Working on:{}".format( os.path.join(a.outpath,fs) ) )
+
+        # if we've generated this (possibly with lucky option, which would result in loss of data) don't overwrite the file.
         if( os.path.exists( os.path.join(a.outpath,fs) ) ):
             if( os.path.getsize( os.path.join(a.outpath,fs) ) != 0 ):
                 print("skipping file! It exists already!")
                 continue
- 
+        # if we haven't make the file on a previous run of this script, make the file and append little bufr files. 
         with open( os.path.join(a.outpath,fs), 'wb' ) as f:
             filesToDelete = []
             for b in allBufrFiles:
@@ -56,14 +58,17 @@ def go ( a ):
                     f.write( ff.read() )
                     ff.close()
                     filesToDelete.append( b )
+            # if the user selects lucky option, delete the little files once big file has been generated.
             if(a.lucky):
-                print("You have indicated you feel lucky. Good for you! I'm going to delete all the files I just concatenated... Still feel lucky?")
+                print("Deleting {} files! Still feel lucky?".format( len(filesToDelete) ) )
                 for fdel in filesToDelete: os.remove(fdel)
                 # since I just deleted these things, update the list.  
                 allBufrFiles = glob.glob( os.path.join(a.inpath, a.prefix+"*.bufr") )
                 allBufrFiles.sort()
         # if we just created an empty file, delete it. 
-        if( os.path.getsize( os.path.join(a.outpath,fs) ) == 0 ): os.remove( os.path.join(a.outpath,fs) ) 
+        if( os.path.getsize( os.path.join(a.outpath,fs) ) == 0 ):
+            print( "Deleting {}. Empty file.".format( os.path.join(a.outpath,fs) ) )
+            os.remove( os.path.join(a.outpath,fs) ) 
 
 if __name__ == "__main__":
     cwd = os.getcwd()
