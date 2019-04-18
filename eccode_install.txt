@@ -1,0 +1,13 @@
+
+0. source ~/bin/go3.csh to get anaconda3 environment
+1. Download the tarball https://confluence.ecmwf.int/download/attachments/45757960/eccodes-2.12.0-Source.tar.gz
+2. tar -xvf eccodes-2.12.0-Source.tar.gz
+3. mkdir build
+4. cd build
+5. module load other/cmake-3.8.2 
+5. cmake -DCMAKE_INSTALL_PREFIX=/discover/nobackup/bkarpowi/anaconda3/ ../eccodes-2.12.0-Source
+6. ctest make sure it passes
+7. make install
+8. source ~/bin/go3.csh to update environment with eccodes installed
+9. bufr_dump your favorite bufr file.
+
