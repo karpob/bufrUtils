@@ -1,0 +1,37 @@
+How to build AAPP (my *favorite* package). 
+
+
+Bryan Karpowicz 20190424
+
+
+Steps to install someplace and use it:
+1. Download from NWPSAF
+2. tar -xvf AAPP_8.3.tgz
+3. (maybe optional) Install eccodes (use the power of the internets, only trick there is make sure you load a cmake module, and consistent gcc 7.2  module on discover). 
+4. (maybe optional) Install or point to an existing hdf5 (probably one in your favorite anaconda build)
+5. change into the AAPP_8.3 directory you just made. 
+5. The configure is the most non-standard "automake-style" configure 
+   What I did since I build my own anaconda ("myid" was something else ;) ):
+./configure --external-libs="-L/discover/nobackup/bkarpowi/anaconda3/lib -leccodes -leccodes_f90 -L /discover/nobackup/bkarpowi/anaconda3/lib -lhdf5 -lhdf5_hl -lhdf5_fortran -lhdf5hl_fortran" --external-includes="-I/discover/nobackup/bkarpowi/anaconda3/include/" --external-modules="-I/discover/nobackup/bkarpowi/anaconda3/include/" --fortran-compiler=gfortran --site-id=myid
+   You can probably do the same, since I probably will always have eccodes, and hdf5 here in some form. If you want your own, modify paths accordingly. keep in mind you must have the full paths up to lib, and include along with the -I, and -L. 
+6. make
+7. you need to add LD_LIBRARY_PATH for eccodes to your environment: setenv LD_LIBRARY_PATH /discover/nobackup/bkarpowi/anaconda3/lib/
+8. add environment variable: 
+   AAPP_PREFIX=/discover/nobackup/projects/gmao/obsdev/bkarpowi/AAPP/AAPP_8.3
+9. Add AAPP to your path (you could install it someplace with the configure/make install ).  
+   set path = ( $path /discover/nobackup/projects/gmao/obsdev/bkarpowi/AAPP/AAPP_8.3/AAPP/bin/ )
+
+Using it for CrIS 431 subsetting:
+1. Make sure 7-9 are part of your shell environment. 
+2. convert your bufr file to AAPP native l1c format.
+   eccodes_decode_bufr_1c -i filename.bufr CRISFSR 
+3. Subset the file make sure you change the fdf file so you don't thin data/preproc/CRIS_FSR.fdf. I the only thing you need to do is set thinning to 0. Then subset the channels in AAPP native format  
+   cris_channels filename.l1c filenameOutput.l1c 
+4. convert the output back to bufr. 
+   eccodes_encode_bufr_1c -i filenameOutput.l1c CRISFSR
+
+
+...or just use the subset431.py script
+
+
+
