@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import glob, argparse, os
 
+repoPath = os.path.dirname( os.path.realpath(__file__) ) 
 
 def go ( a ):
     """
@@ -13,11 +14,12 @@ def go ( a ):
     # all source bufr files in the directory 
     allBufrFiles = glob.glob( os.path.join(a.inpath,"*.bufr_d") )
     allBufrFiles.sort()
-    repoPath = os.path.dirname( os.path.realpath(__file__) ) 
-    h = open( os.path.join(repoPath, 'CrIS_BUFR_Table.hdr') ,'rb')
+    if(len(allBufrFiles) == 0):
+        allBufrFiles = glob.glob( os.path.join(a.inpath,"*.bufr") )
+        allBufrFiles.sort()
+    h = open( a.hdr ,'rb')
     head = h.read()
     h.close()
-
     for f in allBufrFiles:
         print( "Working on: {}".format(f) )
         # open the file and read in data.
@@ -35,6 +37,6 @@ if __name__ == "__main__":
     cwd = os.getcwd()
     parser = argparse.ArgumentParser( description = "Tack on header to CrIS 399 files")
     parser.add_argument('--input', help = "input path where tiny BUFR files are stored.", required = False, dest = 'inpath',default = cwd )
-
+    parser.add_argument('--header', help = "binary header file to append.", required = False, dest = 'hdr', default = os.path.join(repoPath,'CrIS_431.hdr') ) 
     a = parser.parse_args()
     go( a )
