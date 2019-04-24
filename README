@@ -2,7 +2,9 @@ Scripts
  catBufr.py -- will cat groups of bufr files into 6hr windows for specified time range.
  collapse.sh -- collapses directory, and dumps all files into a single directory.
  appendHeader.py -- script to append CrIS BUFR header for reading into the GSI.
-
+ subset431.py 	-- from a FSR subset use AAPP to make 431 subset.
 Misc
-eccode_install.txt -- How to install eccodes, so you can investigate contents of bufr files easily. 
-CrIS_BUFR_Table.hdr -- header to make CrIS 399 subset readable by GSI.
+ AAPP_howto.txt  -- howto install AAPP on discover
+ eccode_install.txt -- How to install eccodes, so you can investigate contents of bufr files easily.
+ CrIS_BUFR_Table.hdr -- header to make CrIS 399 subset readable by GSI.
+ CrIS_431.hdr --- header that appears in the 431 subset, probably will work for anythin in NOAAs system
