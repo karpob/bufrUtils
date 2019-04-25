@@ -7,4 +7,4 @@ Misc
  AAPP_howto.txt  -- How to install AAPP on discover
  eccode_install.txt -- How to install eccodes, so you can investigate contents of bufr files easily.
  CrIS_BUFR_Table.hdr -- header to make CrIS 399 subset readable by GSI.
- CrIS_431.hdr --- header that appears in the 431 subset, probably will work for anythin in NOAAs system
+ CrIS_431.hdr --- header that appears in the 431 subset, probably will work for anything in NOAAs system
