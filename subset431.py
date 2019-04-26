@@ -19,6 +19,7 @@ def go ( a ):
     else:
         bufrTag = '.bufr'
 
+    flist.sort()
 
     for ifile in flist:
         # encode into native AAPP format
