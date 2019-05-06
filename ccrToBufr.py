@@ -29,7 +29,6 @@ def go ( ncfile, outputFilename ):
     istore = 0  
     for i,t in enumerate( unixTimeSeconds ):
         currentTime = getDatetimeFromUnix( t ) 
-        print(currentTime, currentTime.minute)
         if (currentTime.minute != previousTime.minute):
             groups.append([istore,i+1])
             istore = i
@@ -68,6 +67,15 @@ def readNc( ncfile ):
     d['Time'] = d['Time']/1000.0 
 
     return d
+
+def scanAngleToZenithAngle( scanAngle, satelliteHeight, altitudeSurface=0.0 ):
+    """
+    convert scan angle (in CRTM notation)/ View Angle ( in CrIS CCR notation ) to Satellite Zenith Angle 
+    """
+    Re = 6371
+    Rs = satelliteHeight + Re
+    Ra = Re + altitudeSurface 
+    return np.rad2deg( np.arcsin( (Rs/Ra) * np.sin( np.deg2rad( scanAngle ) ) ) ) 
 
 def readSubset ():
     """
@@ -152,7 +160,11 @@ def bufr_encode(inputData, outputFilename, idxWave, idxBuf, idxTime ):
 
     codes_set_array(ibufr, 'latitude',inputData['CrIS_Latitude'][idxTime[0]:idxTime[1]].tolist())
     codes_set_array(ibufr, 'longitude', inputData['CrIS_Longitude'][idxTime[0]:idxTime[1]].tolist())
-    codes_set_array(ibufr, 'satelliteZenithAngle', inputData['CrIS_View_Angle'][idxTime[0]:idxTime[1]].tolist())
+
+    #calculate satellite zenith Angle.
+    satZA = scanAngleToZenithAngle( inputData['CrIS_View_Angle'][idxTime[0]:idxTime[1]] , inputData['Satellite_Height'][idxTime[0]:idxTime[1]] ) 
+
+    codes_set_array(ibufr, 'satelliteZenithAngle', satZA.tolist())
     codes_set(ibufr, 'bearingOrAzimuth', CODES_MISSING_DOUBLE)
     codes_set_array(ibufr, 'solarZenithAngle',inputData['Solar_Zenith'][idxTime[0]:idxTime[1]].tolist() )
     codes_set(ibufr, 'solarAzimuth', CODES_MISSING_DOUBLE)
@@ -196,8 +208,6 @@ def bufr_encode(inputData, outputFilename, idxWave, idxBuf, idxTime ):
 
     for ch,idx in enumerate(idxWave):
         codes_set(ibufr, '#{}#channelNumber'.format(ch+1), int(idxBuf[ch]))
-        print(inputData['CrIS_Radiances'].shape)
-        print(len(inputData['CrIS_Radiances'][idxTime[0]:idxTime[1],idx].tolist())) 
         codes_set_array(ibufr, '#{}#channelRadiance'.format(ch+1), (inputData['CrIS_Radiances'][idxTime[0]:idxTime[1],idx]/1000).tolist() )
 
 
