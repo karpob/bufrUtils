@@ -68,11 +68,14 @@ def readNc( ncfile ):
 
     return d
 
-def scanAngleToZenithAngle( scanAngle, satelliteHeight, altitudeSurface=0.0 ):
+def scanAngleToZenithAngle( scanAngle, satelliteHeight, altitudeSurface = 0.0 ):
     """
-    convert scan angle (in CRTM notation)/ View Angle ( in CrIS CCR notation ) to Satellite Zenith Angle 
+    convert scan angle (in CRTM notation)/ View Angle ( in CrIS CCR notation ) to Satellite Zenith Angle
+    scanAngle : units degrees
+    satelliteHeight: units km
+    altitudeSurface: units km (Well, as long as distance units are consistent we don't really care, but in this script, that is what they are). 
     """
-    Re = 6371
+    Re = 6371.0
     Rs = satelliteHeight + Re
     Ra = Re + altitudeSurface 
     return np.rad2deg( np.arcsin( (Rs/Ra) * np.sin( np.deg2rad( scanAngle ) ) ) ) 
