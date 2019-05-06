@@ -174,7 +174,10 @@ def bufr_encode(inputData, outputFilename, idxWave, idxBuf, idxTime ):
     codes_set(ibufr, 'orbitQualifier', 0)
     codes_set_array(ibufr, 'scanLineNumber', inputData['Scan_Line'][idxTime[0]:idxTime[1]].tolist())
     codes_set_array(ibufr, 'fieldOfRegardNumber', inputData['CrIS_FORs'][idxTime[0]:idxTime[1]].tolist())
-    codes_set(ibufr, 'fieldOfViewNumber',CODES_MISSING_LONG )
+
+    #faking field of view numbers
+    fives = 5*np.ones( len(inputData['CrIS_FORs'][idxTime[0]:idxTime[1]].tolist()) )
+    codes_set_array(ibufr, 'fieldOfViewNumber', fives.astype('int').tolist()  )
     codes_set(ibufr, 'orbitNumber', 36217)
     codes_set(ibufr, 'heightOfLandSurface', CODES_MISSING_LONG)
     codes_set_array(ibufr, 'height', inputData['Satellite_Height'][idxTime[0]:idxTime[1]].tolist())
