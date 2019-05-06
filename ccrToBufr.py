@@ -7,10 +7,7 @@ import glob, argparse, os
 repoPath = os.path.dirname( os.path.realpath(__file__) ) 
 """
 To Do list on this thing:
-1. Fill in 5 for FOVs.
-2. Put in something for QC values with stuff from Netcdf.
-3. Double check indexing to make sure we're pulling the right channels from the netcdf file (idxWave)
-4. Double check indexing that the index we're dumping is the right index that the BUFR file is expecting. (idxBufr)
+1. Put in something for QC values with stuff from Netcdf.
 """
 
 def getDatetimeFromUnix( d ):
