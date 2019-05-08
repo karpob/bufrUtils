@@ -74,8 +74,11 @@ def scanAngleToZenithAngle( scanAngle, satelliteHeight, altitudeSurface = 0.0 ):
     """
     Re = 6371.0
     Rs = satelliteHeight + Re
-    Ra = Re + altitudeSurface 
-    return np.rad2deg( np.arcsin( (Rs/Ra) * np.sin( np.deg2rad( scanAngle ) ) ) ) 
+    Ra = Re + altitudeSurface
+    # remove +/- scan angle, because the GSI will try to do it's own thing with -/+
+    # it assumes that the data will not have a sign attached to it yet. 
+    scanAngle = np.abs(scanAngle) 
+    return np.rad2deg( np.arcsin( (Rs/Ra) * np.sin( np.deg2rad( scanAngle ) ) ) )  
 
 def readSubset ():
     """
@@ -137,7 +140,7 @@ def bufr_encode(inputData, outputFilename, idxWave, idxBuf, idxTime ):
     # Create the structure of the data section
     codes_set_array(ibufr, 'unexpandedDescriptors', ivalues)
 
-    codes_set(ibufr, 'satelliteIdentifier', 224)
+    codes_set(ibufr, 'satelliteIdentifier', 225)
     codes_set(ibufr, 'centre', 160)
     codes_set(ibufr, '#1#satelliteInstruments', 620)
     codes_set(ibufr, 'satelliteClassification', 3)
