@@ -65,16 +65,19 @@ def readNc( ncfile ):
 
     return d
 
-def scanAngleToZenithAngle( scanAngle, satelliteHeight, altitudeSurface = 0.0 ):
+def scanAngleToZenithAngle( scanAngle, satelliteHeight, latitude, altitudeSurface = 0.0 ):
     """
     convert scan angle (in CRTM notation)/ View Angle ( in CrIS CCR notation ) to Satellite Zenith Angle
     scanAngle : units degrees
     satelliteHeight: units km
     altitudeSurface: units km (Well, as long as distance units are consistent we don't really care, but in this script, that is what they are). 
     """
-    Re = 6371.0
-    Rs = satelliteHeight + Re
-    Ra = Re + altitudeSurface
+    Re = 6378.16
+    Rp = 6356.77
+    beta = 0.9966464 #could be Rp/Re if you want. 
+    Rearth =  Re/np.sqrt( np.sin( np.deg2rad(latitude) )**2/beta**2 + np.cos( np.deg2rad(latitude) )**2)
+    Rs = satelliteHeight + Rearth
+    Ra = Rearth + altitudeSurface
     # remove +/- scan angle, because the GSI will try to do it's own thing with -/+
     # it assumes that the data will not have a sign attached to it yet. 
     scanAngle = np.abs(scanAngle) 
@@ -165,7 +168,7 @@ def bufr_encode(inputData, outputFilename, idxWave, idxBuf, idxTime ):
     codes_set_array(ibufr, 'longitude', inputData['CrIS_Longitude'][idxTime[0]:idxTime[1]].tolist())
 
     #calculate satellite zenith Angle.
-    satZA = scanAngleToZenithAngle( inputData['CrIS_View_Angle'][idxTime[0]:idxTime[1]] , inputData['Satellite_Height'][idxTime[0]:idxTime[1]] ) 
+    satZA = scanAngleToZenithAngle( inputData['CrIS_View_Angle'][idxTime[0]:idxTime[1]], inputData['Satellite_Height'][idxTime[0]:idxTime[1]], inputData['CrIS_Latitude'][idxTime[0]:idxTime[1]] ) 
 
     codes_set_array(ibufr, 'satelliteZenithAngle', satZA.tolist())
     codes_set(ibufr, 'bearingOrAzimuth', CODES_MISSING_DOUBLE)
