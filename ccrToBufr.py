@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from multiprocessing import Pool
 from eccodes import *
 import h5py
 import numpy as np
@@ -13,8 +14,8 @@ To Do list on this thing:
 def getDatetimeFromUnix( d ):
     return datetime.utcfromtimestamp( d) 
 
-def go ( ncfile, outputFilename ): 
-
+def go ( ncfile  ): 
+    outputFilename = ncfile.replace('.nc','.bufr')   
     inputData = readNc( ncfile )
     #idxWave are the indices for the 431 subset WITH guardbands, idxBufr are the index values typically associated with bufr files (the 2211 we're used to).
     idxWave, idxBuf = readSubset()
@@ -839,8 +840,14 @@ def bufr_encode(inputData, outputFilename, idxWave, idxBuf, idxTime ):
 
 if __name__ =="__main__":
     parser = argparse.ArgumentParser( description = "Convert CCR Netcdf to bufr.")
-    parser.add_argument('--file', help = 'input file', required = True, dest = 'infile')
+    parser.add_argument('--inpath', help = 'input directory', required = True, dest = 'path')
+    parser.add_argument('--threads', help = 'number of threads', required = True, dest = 'nthreads')
 
     a = parser.parse_args()
- 
-    go (a.infile, a.infile.replace('.nc','.bufr') )
+    files = glob.glob( os.path.join(a.path,'*.nc') )
+    p = Pool( int( a.nthreads ) )
+    # pass ichans in as non-iterable via partial.
+    print("Initialized Pool: {} threads.".format(a.nthreads))
+    print( "Processing {} files.".format( len(files) ) )
+    returns = p.map( go, files) 
+    print('Done!')
