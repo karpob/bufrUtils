@@ -6,8 +6,9 @@
 4. cd build
 5. module load other/cmake-3.8.2 
 5. cmake -DCMAKE_INSTALL_PREFIX=/discover/nobackup/bkarpowi/anaconda3/ ../eccodes-2.12.0-Source
-6. ctest make sure it passes
-7. make install
-8. source ~/bin/go3.csh to update environment with eccodes installed
-9. bufr_dump your favorite bufr file.
+6. make 
+7. ctest make sure it passes
+8. make install
+9. source ~/bin/go3.csh to update environment with eccodes installed
+10. bufr_dump your favorite bufr file.
 
