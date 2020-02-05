@@ -1,0 +1,127 @@
+.------------------------------------------------------------------------------.
+| ------------   USER DEFINITIONS FOR TABLE-A TABLE-B TABLE D   -------------- |
+|------------------------------------------------------------------------------|
+| MNEMONIC | NUMBER | DESCRIPTION                                              |
+|----------|--------|----------------------------------------------------------|
+|          |        |                                                          |
+| NC021202 | A10060 | MSG TYPE 021-202 CrIS radiance data                      |
+|          |        |                                                          |
+| YYMMDD   | 301011 | Date -- year, month, day                                 |
+| HHMM     | 301012 | Time -- hour, minute                                     |
+| LTLONH   | 301021 | High accuracy latitude/longitude position                |
+| LOCPLAT  | 304030 | Location of platform (satellite) sequence                |
+| BCFQFSQ  | 350200 | NPP CrIS band calibration & f-o-v quality flag sequence  |
+| CRCHN    | 350201 | NPP CrIS channel data                                    |
+|          |        |                                                          |
+| SAID     | 001007 | Satellite identifier                                     |
+| OGCE     | 001033 | Identification of originating/generating center          |
+| SIID     | 002019 | Satellite instruments                                    |
+| SCLF     | 002020 | Satellite classification                                 |
+| RDTF     | 002165 | Radiance type flags                                      |
+| YEAR     | 004001 | Year                                                     |
+| MNTH     | 004002 | Month                                                    |
+| DAYS     | 004003 | Day                                                      |
+| HOUR     | 004004 | Hour                                                     |
+| MINU     | 004005 | Minute                                                   |
+| SECO     | 004006 | Second                                                   |
+| CLATH    | 005001 | Latitude (high accuracy)                                 |
+| BEARAZ   | 005021 | Bearing or azimuth                                       |
+| SOLAZI   | 005022 | Solar azimuth                                            |
+| ORBN     | 005040 | Orbit number                                             |
+| SLNM     | 005041 | Scan line number                                         |
+| CHNM     | 005042 | Channel number                                           |
+| FOVN     | 005043 | Field of view number                                     |
+| FORN     | 005045 | Field of regard number                                   |
+| CLONH    | 006001 | Longitude (high accuracy)                                |
+| WVNM     | 006029 | Wave number                                              |
+| HMSL     | 007002 | Height or altitude                                       |
+| SAZA     | 007024 | Satellite zenith angle                                   |
+| SOZA     | 007025 | Solar zenith angle                                       |
+| LSQL     | 008012 | Land/Sea qualifier                                       |
+| STKO     | 008075 | Ascending/Descending orbit qualifier                     |
+| TOBD     | 008076 | Type of band                                             |
+| HOLS     | 010001 | Height of land surface                                   |
+| PDNP     | 010031 | In dir. of North Pole, distance from the Earth's center  |
+| SRAD     | 014044 | Channel radiance                                         |
+| TOCC     | 020010 | Cloud cover (total)                                      |
+| HOCT     | 020014 | Height of top of cloud                                   |
+| ALFR     | 021166 | Land fraction                                            |
+| STCH     | 025140 | Start channel                                            |
+| ENCH     | 025141 | End channel                                              |
+| PD00     | 027031 | In direction of  0 deg E, distance from Earth's center   |
+| PD90     | 028031 | In direction of 90 deg E, distance from Earth's center   |
+| QMRKH    | 033003 | Quality information                                      |
+| NSQF     | 033075 | Scan-level quality flags                                 |
+| NCQF     | 033076 | Calibration quality flags                                |
+| NFQF     | 033077 | Field of view quality flags                              |
+| NGQI     | 033078 | Geolocation quality                                      |
+|          |        |                                                          |
+|------------------------------------------------------------------------------|
+| MNEMONIC | SEQUENCE                                                          |
+|----------|-------------------------------------------------------------------|
+|          |                                                                   |
+|          |                                                                   |
+| NC021202 | SAID     OGCE     SIID     SCLF     YYMMDD   HHMM                 |
+| NC021202 | 207003   SECO     207000   LOCPLAT  LTLONH   SAZA     BEARAZ      |
+| NC021202 | SOZA     SOLAZI   STKO     201133   SLNM     201000   FORN        |
+| NC021202 | FOVN     ORBN     HOLS     201129   HMSL     201000               |
+| NC021202 | 202127   201125   ALFR     201000   202000   LSQL     TOCC        |
+| NC021202 | HOCT     RDTF     NSQF    "BCFQFSQ"3                              |
+| NC021202 | TOBD     NGQI     QMRKH   (CRCHN)                                 |
+|          |                                                                   |
+| YYMMDD   | YEAR     MNTH     DAYS                                            |
+| HHMM     | HOUR     MINU                                                     |
+| LTLONH   | CLATH    CLONH                                                    |
+| LOCPLAT  | PD00     PD90     PDNP                                            |
+| BCFQFSQ  | TOBD     WVNM     WVNM     STCH     ENCH     NCQF     NFQF        |
+| CRCHN    | 201133   CHNM     201000   SRAD                                   |
+|          |                                                                   |
+|------------------------------------------------------------------------------|
+| MNEMONIC | SCAL | REFERENCE   | BIT | UNITS                    |-------------|
+|----------|------|-------------|-----|--------------------------|-------------|
+|          |      |             |     |                          |-------------|
+| SAID     |    0 |           0 |  10 | Code table               |-------------|
+| OGCE     |    0 |           0 |   8 | Code table               |-------------|
+| SIID     |    0 |           0 |  11 | Code table               |-------------|
+| SCLF     |    0 |           0 |   9 | Code table               |-------------|
+| RDTF     |    0 |           0 |  15 | Flag table               |-------------|
+| YEAR     |    0 |           0 |  12 | Year                     |-------------|
+| MNTH     |    0 |           0 |   4 | Month                    |-------------|
+| DAYS     |    0 |           0 |   6 | Day                      |-------------|
+| HOUR     |    0 |           0 |   5 | Hour                     |-------------|
+| MINU     |    0 |           0 |   6 | Minute                   |-------------|
+| SECO     |    0 |           0 |   6 | Second                   |-------------|
+| CLATH    |    5 |    -9000000 |  25 | Degree                   |-------------|
+| BEARAZ   |    2 |           0 |  16 | Degree true              |-------------|
+| SOLAZI   |    2 |           0 |  16 | Degree true              |-------------|
+| ORBN     |    0 |           0 |  24 | Numeric                  |-------------|
+| SLNM     |    0 |           0 |   8 | Numeric                  |-------------|
+| CHNM     |    0 |           0 |   6 | Numeric                  |-------------|
+| FOVN     |    0 |           0 |   8 | Numeric                  |-------------|
+| FORN     |    0 |           0 |   8 | Numeric                  |-------------|
+| CLONH    |    5 |   -18000000 |  26 | Degree                   |-------------|
+| WVNM     |    1 |           0 |  22 | m**-1                    |-------------|
+| HMSL     |   -1 |         -40 |  16 | m                        |-------------|
+| SAZA     |    2 |       -9000 |  15 | Degree                   |-------------|
+| SOZA     |    2 |       -9000 |  15 | Degree                   |-------------|
+| LSQL     |    0 |           0 |   2 | Code table               |-------------|
+| STKO     |    0 |           0 |   2 | Code table               |-------------|
+| TOBD     |    0 |           0 |   6 | Code table               |-------------|
+| HOLS     |    0 |        -400 |  15 | m                        |-------------|
+| PDNP     |    2 | -1073741824 |  31 | m                        |-------------|
+| SRAD     |    7 |     -100000 |  22 | W m**-2 sr**-1 cm        |-------------|
+| TOCC     |    0 |           0 |   7 | %                        |-------------|
+| HOCT     |   -1 |         -40 |  11 | m                        |-------------|
+| ALFR     |    3 |           0 |  10 | Numeric                  |-------------|
+| STCH     |    0 |           0 |  14 | Numeric                  |-------------|
+| ENCH     |    0 |           0 |  14 | Numeric                  |-------------|
+| PD00     |    2 | -1073741824 |  31 | m                        |-------------|
+| PD90     |    2 | -1073741824 |  31 | m                        |-------------|
+| QMRKH    |    0 |           0 |   3 | Code table               |-------------|
+| NSQF     |    0 |           0 |  13 | Flag table               |-------------|
+| NCQF     |    0 |           0 |   9 | Flag table               |-------------|
+| NFQF     |    0 |           0 |  19 | Flag table               |-------------|
+| NGQI     |    0 |           0 |   4 | Code table               |-------------|
+|          |      |             |     |                          |-------------|
+`------------------------------------------------------------------------------'
+
