@@ -1,8 +1,28 @@
 Scripts
- catBufr.py -- will cat groups of bufr files into 6hr windows for specified time range.
+ runNpr.py <-- runs NCEPs NC2BUFR code (with my modifications) 
+
+ usage: runNpr.py [-h] --ncpath NCPATH --outpath OUTPATH [--mainpath MAINPATH]
+                 [--workpath WORKPATH] [--tablepath TABLEPATH]
+ the following arguments are required: --ncpath, --outpath
+
+ catBufr.py <-- will cat groups of bufr files into 6hr windows for specified time range.
+
+ usage: catBufr.py [-h] --start START --end END [--prefix PREFIX]
+                  [--instrument INSTRUMENT] [--input INPATH]
+                  [--output OUTPATH] [--between BETWEEN] [--lucky]
+ the following arguments are required: --start (YYYYMMDDHH) , --end (YYYYMMDDHH)
+ You'll probaby want to specify and --input, --output this controls where the files are read in and where they're output.
+
+ appendHeader.py <-- will append binary header file for CrIS_NSR message necessary to read into gsi.
+ usage: appendHeader.py [-h] [--input INPATH] [--header HDR]
+ all args are optional. If you run it in this directory, it will pickup files named bufr_d and append the header. 
+ Otherwise, you can specify the full path to your bufr_d files using --input.
+
+Historical scripts.
  collapse.sh -- collapses directory, and dumps all files into a single directory.
  appendHeader.py -- script to append CrIS BUFR header for reading into the GSI.
  subset431.py 	-- from a FSR subset use AAPP to make 431 subset.
+ ccrToBufr.py -- does the same thing as the npr code, but for FSR.
 Misc
  AAPP_howto.txt  -- How to install AAPP on discover
  eccode_install.txt -- How to install eccodes, so you can investigate contents of bufr files easily.
