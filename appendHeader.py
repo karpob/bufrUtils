@@ -37,6 +37,6 @@ if __name__ == "__main__":
     cwd = os.getcwd()
     parser = argparse.ArgumentParser( description = "Tack on header to CrIS 399 files")
     parser.add_argument('--input', help = "input path where tiny BUFR files are stored.", required = False, dest = 'inpath',default = cwd )
-    parser.add_argument('--header', help = "binary header file to append.", required = False, dest = 'hdr', default = os.path.join(repoPath,'CrIS_431.hdr') ) 
+    parser.add_argument('--header', help = "binary header file to append.", required = False, dest = 'hdr', default = os.path.join(repoPath,'CrIS_BUFR_Table.hdr') ) 
     a = parser.parse_args()
     go( a )

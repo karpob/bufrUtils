@@ -77,7 +77,7 @@ if __name__ == "__main__":
     parser.add_argument('--end', help = 'end dtg YYYYMMDDhh', required = True, dest = 'end')
     parser.add_argument('--prefix', help = "Everything in the input bufr file name \
                                             before the point where start time is tagged.",\
-                        required = False, dest = 'prefix',default="NUCAPS-C0399_v2r0_j01_s")
+                        required = False, dest = 'prefix',default="NUCAPS-CCR-AR_v1r0_npp_s")
     parser.add_argument('--instrument', help = "Instrument name to tag output file.", required = False, dest = 'instrument',default="cris")
     parser.add_argument('--input', help = "input path where tiny BUFR files are stored.", required = False, dest = 'inpath',default = cwd )
     parser.add_argument('--output', help = "output path where big BUFR files are stored.", required = False, dest = 'outpath',default = cwd )
