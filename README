@@ -19,9 +19,9 @@ Scripts
  Otherwise, you can specify the full path to your bufr_d files using --input.
 
  bufrMapCris.py <-- Plot out maps of assimilated channels when given any flavor of cris bufr file I've seen fsr431, fsr2211, nsr399, nsr1305
- usage: bufrMapCrIS.py [-h] --cntl CNTL
+ usage: bufrMapCrIS.py [-h] --bufr bufr
  bufrMapCrIS.py: error: the following arguments are required: --cntl
- --cntl is the path where *.bufr_d files exist (will search for these and read them/plot them)
+ --bufr is the path where *.bufr_d files exist (will search for these and read them/plot them)
 
 Historical scripts.
  collapse.sh -- collapses directory, and dumps all files into a single directory.
