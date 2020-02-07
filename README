@@ -39,5 +39,7 @@ Useful commands
  >dd if=gdas1.20170730.t00z.cris.tm00.bufr_d bs=1 skip=6632 > nohead_gdas1.20170730.t00z.cris.tm00.bufr_d
  #bs=1 byte size
  #skip=6632 bytes 
- adjust skip according to whatever header has been appended. 
+ adjust skip according to whatever header has been appended.
 
+ From eccodes
+ codes_split_file nchunks filename # will split the bufr file into nchunks super handy for ginormous 6 hour bufr dumps!
