@@ -18,7 +18,7 @@ Scripts
  all args are optional. If you run it in this directory, it will pickup files named bufr_d and append the header. 
  Otherwise, you can specify the full path to your bufr_d files using --input.
 
- bufrMapCris.py <-- Plot out maps of assimilated channels when given 1305 bufr file (won't work for 399, or FSR quite yet.)
+ bufrMapCris.py <-- Plot out maps of assimilated channels when given any flavor of cris bufr file I've seen fsr431, fsr2211, nsr399, nsr1305
  usage: bufrMapCrIS.py [-h] --cntl CNTL
  bufrMapCrIS.py: error: the following arguments are required: --cntl
  --cntl is the path where *.bufr_d files exist (will search for these and read them/plot them)

@@ -40,8 +40,8 @@ def bufr_decode(input_file):
         except: continue
         if(ibufr is None): break
         codes_set(ibufr, 'unpack', 1)
-        #iVals = codes_get_array(ibufr, 'delayedDescriptorReplicationFactor')
-        #iVals = codes_get_array(ibufr, 'extendedDelayedDescriptorReplicationFactor')
+        try: nchan = codes_get_array(ibufr, 'extendedDelayedDescriptorReplicationFactor')
+        except: continue
         iVal = codes_get(ibufr, 'edition')
         iVal = codes_get(ibufr, 'masterTableNumber')
         iVal = codes_get(ibufr, 'bufrHeaderCentre')
@@ -120,10 +120,8 @@ def bufr_decode(input_file):
         #iVal = codes_get(ibufr, 'qualityInformation')
         rad = []
         ch = 1
-        while True:
-            try: rad.append(np.asarray(codes_get_array(ibufr, '#{}#channelRadiance'.format(ch))))
-            except: break
-            ch += 1
+        for ch in np.arange(nchan):
+            rad.append(np.asarray(codes_get_array(ibufr, '#{}#channelRadiance'.format(ch+1))))
         rad = np.asarray(rad)
         nchan = rad.shape[0]  
         codes_release(ibufr)
@@ -152,6 +150,7 @@ def bufr_decode(input_file):
     obCountList = []
     obCounts = 0
     for i in range(msgCnt):
+        print(radAll[i].shape)
         obCountList.append(radAll[i].shape[1])
         obCounts += radAll[i].shape[1]
     outRad = np.zeros([nchan,obCounts])
@@ -180,12 +179,22 @@ def go(cntlPath):
     idx = np.asarray(h5['idxBufrSubset']) - 1
     wn = np.asarray(h5['wavenumbers'])[idx]
     idxAssimilated = np.asarray(h5['geosAssimilated'])-1
-    wnAssim = np.asarray(h5['wavenumbers'])[idxAssimilated]
+    wnAssimNsr = np.asarray(h5['wavenumbers'])[idxAssimilated]
 
+    h5 = h5py.File('cris-fsr_wavenumbers.h5','r')
+    idx = np.asarray(h5['idxBufrSubset']) - 1
+    wn = np.asarray(h5['wavenumbers'])[idx]
+    idxAssimilated = np.asarray(h5['geosAssimilated'])-1
+    wnAssimFsr= np.asarray(h5['wavenumbers'])[idxAssimilated]
 
     for i,f in enumerate(cntList):
-        #if(os.path.basename(f)[0:46] != os.path.basename(expList[i])[0:46]): continue 
         cLw, cMw, cSw, cTimes, cLat, cLon, wnLw, wnMw, wnSw = readSdrBufr(f)
+
+        if( len(wnLw)+len(wnMw)+len(wnSw) == 2211 or len(wnLw)+len(wnMw)+len(wnSw) == 431):
+            wnAssim = wnAssimFsr
+        else:
+            wnAssim = wnAssimNsr
+
         for i in range(len(wnLw)):
             if wnLw[i] in wnAssim:
                 plotMapHist(cLat, cLon,\
@@ -212,8 +221,37 @@ def readSdrBufr ( fname ):
         wnMw = np.arange(1210,1750+1.25, 1.25)
         wnSw = np.arange(2155,2550+2.5, 2.5)
         print('wavenumbers',len(wnLw)+len(wnMw)+len(wnSw))
+    elif(rad.shape[0] == 399):
+        h5 = h5py.File('cris_wavenumbers.h5','r')
+        idx = np.asarray(h5['idxBufrSubset']) - 1
+        wn = np.asarray(h5['wavenumbers'])[idx]
+        wnLw = wn[np.where(wn<=1095)]
+        wnMw = wn[np.where( (wn>1200) & (wn<=1750) )]
+        wnSw = wn[np.where( wn>2100 )]
+
+        lw = rad[np.where(wn<=1095)]
+        mw = rad[np.where( (wn>1200) & (wn<1800))]
+        sw = rad[np.where( (wn>2100))]
+    elif(rad.shape[0] == 2211):
+        lw = rad[0:713,:]
+        mw = rad[713:713+865,:]
+        sw = rad[713+865:713+865+633,:]
+        wnLw = np.arange(650,1095+0.625,0.625)
+        wnMw = np.arange(1210,1750+0.625, 0.625)
+        wnSw = np.arange(2155,2550+0.625, 0.625)
+    elif(rad.shape[0] == 431):
+        h5 = h5py.File('cris-fsr_wavenumbers.h5','r')
+        idx = np.asarray(h5['idxBufrSubset']) - 1
+        wn = np.asarray(h5['wavenumbers'])[idx]
+        wnLw = wn[np.where(wn<=1095)]
+        wnMw = wn[np.where( (wn>1200) & (wn<=1750) )]
+        wnSw = wn[np.where( wn>2100 )]
+ 
+        lw = rad[np.where(wn<=1095)]
+        mw = rad[np.where( (wn>1200) & (wn<1800))]
+        sw = rad[np.where( (wn>2100))]
     else:
-        print('warning, this is not NSR 1305. This is probably not going to work.') 
+        print('warning, this is not a channel set I know. This is probably not going to work.') 
 
     LW = np.zeros(lw.shape)
     MW = np.zeros(mw.shape)
