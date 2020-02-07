@@ -18,6 +18,11 @@ Scripts
  all args are optional. If you run it in this directory, it will pickup files named bufr_d and append the header. 
  Otherwise, you can specify the full path to your bufr_d files using --input.
 
+ bufrMapCris.py <-- Plot out maps of assimilated channels when given 1305 bufr file (won't work for 399, or FSR quite yet.)
+ usage: bufrMapCrIS.py [-h] --cntl CNTL
+ bufrMapCrIS.py: error: the following arguments are required: --cntl
+ --cntl is the path where *.bufr_d files exist (will search for these and read them/plot them)
+
 Historical scripts.
  collapse.sh -- collapses directory, and dumps all files into a single directory.
  appendHeader.py -- script to append CrIS BUFR header for reading into the GSI.
@@ -28,3 +33,11 @@ Misc
  eccode_install.txt -- How to install eccodes, so you can investigate contents of bufr files easily.
  CrIS_BUFR_Table.hdr -- header to make CrIS 399 subset readable by GSI.
  CrIS_431.hdr --- header that appears in the 431 subset, probably will work for anything in NOAAs system
+
+Useful commands
+ to strip off binary bufr header (junk the GSI needs to read/appendHeader.py adds)
+ >dd if=gdas1.20170730.t00z.cris.tm00.bufr_d bs=1 skip=6632 > nohead_gdas1.20170730.t00z.cris.tm00.bufr_d
+ #bs=1 byte size
+ #skip=6632 bytes 
+ adjust skip according to whatever header has been appended. 
+
