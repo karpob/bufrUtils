@@ -14,15 +14,42 @@ from multiprocessing import Pool
 from functools import partial
 from maps import plotMapHist,plotMap
 #from Ipython import embed
-def chunks(l, n):
-    """Yield successive n-sized chunks from l."""
-    for i in range(0, len(l), n):
-        yield l[i:i + n]
+def main(bufrPath):
+    cntList = glob.glob(os.path.join(bufrPath,'*.bufr_d'))
+    h5 = h5py.File('cris_wavenumbers.h5','r')
+    idx = np.asarray(h5['idxBufrSubset']) - 1
+    wn = np.asarray(h5['wavenumbers'])[idx]
+    idxAssimilated = np.asarray(h5['geosAssimilated'])-1
+    wnAssimNsr = np.asarray(h5['wavenumbers'])[idxAssimilated]
 
-def isinFun(eTimes, cTimes):
-    idxOut, = np.where( np.isin(np.asarray(eTimes), cTimes, invert=True) )
-    return idxOut
- 
+    h5 = h5py.File('cris-fsr_wavenumbers.h5','r')
+    idx = np.asarray(h5['idxBufrSubset']) - 1
+    wn = np.asarray(h5['wavenumbers'])[idx]
+    idxAssimilated = np.asarray(h5['geosAssimilated'])-1
+    wnAssimFsr= np.asarray(h5['wavenumbers'])[idxAssimilated]
+
+    for i,f in enumerate(cntList):
+        cLw, cMw, cSw, cTimes, cLat, cLon, wnLw, wnMw, wnSw = readSdrBufr(f)
+
+        if( len(wnLw)+len(wnMw)+len(wnSw) == 2211 or len(wnLw)+len(wnMw)+len(wnSw) == 431):
+            wnAssim = wnAssimFsr
+        else:
+            wnAssim = wnAssimNsr
+
+        for i in range(len(wnLw)):
+            if wnLw[i] in wnAssim:
+                plotMapHist(cLat, cLon,\
+                    cLw[i,:],'Brightness Temperature Wavenumber {} '.format(wnLw[i])+'cm$^{-1}$', 'map_control_{0:08.3f}'.format(wnLw[i]) )
+        for i in range(len(wnMw)):
+            if wnMw[i] in wnAssim:
+                plotMapHist(cLat, cLon,\
+                    cMw[i,:],'Brightness Temperature Wavenumber {} '.format(wnMw[i])+'cm$^{-1}$', 'map_control_{0:08.3f}'.format(wnMw[i]) )
+        for i in range(len(wnSw)):
+            if wnSw[i] in wnAssim:
+                plotMapHist(cLat, cLon,\
+                    cSw[i,:],'Brightness Temperature Wavenumber {} '.format(wnSw[i])+'cm$^{-1}$', 'map_control_{0:08.3f}'.format(wnSw[i]) )
+        
+
 def bufr_decode(input_file):
     f = open(input_file, 'rb')
     radAll = []
@@ -173,43 +200,6 @@ def PlanckFreqInv(wn,Radiance):
     T=(C2_inv_cm*wn)/(np.log(1.+(np.power(wn,3)*C1_inv_cm)/B))
     return T
 
-def go(cntlPath):
-    cntList = glob.glob(os.path.join(cntlPath,'*.bufr_d'))
-    h5 = h5py.File('cris_wavenumbers.h5','r')
-    idx = np.asarray(h5['idxBufrSubset']) - 1
-    wn = np.asarray(h5['wavenumbers'])[idx]
-    idxAssimilated = np.asarray(h5['geosAssimilated'])-1
-    wnAssimNsr = np.asarray(h5['wavenumbers'])[idxAssimilated]
-
-    h5 = h5py.File('cris-fsr_wavenumbers.h5','r')
-    idx = np.asarray(h5['idxBufrSubset']) - 1
-    wn = np.asarray(h5['wavenumbers'])[idx]
-    idxAssimilated = np.asarray(h5['geosAssimilated'])-1
-    wnAssimFsr= np.asarray(h5['wavenumbers'])[idxAssimilated]
-
-    for i,f in enumerate(cntList):
-        cLw, cMw, cSw, cTimes, cLat, cLon, wnLw, wnMw, wnSw = readSdrBufr(f)
-
-        if( len(wnLw)+len(wnMw)+len(wnSw) == 2211 or len(wnLw)+len(wnMw)+len(wnSw) == 431):
-            wnAssim = wnAssimFsr
-        else:
-            wnAssim = wnAssimNsr
-
-        for i in range(len(wnLw)):
-            if wnLw[i] in wnAssim:
-                plotMapHist(cLat, cLon,\
-                    cLw[i,:],'Brightness Temperature Wavenumber {} '.format(wnLw[i])+'cm$^{-1}$', 'map_control_{0:08.3f}'.format(wnLw[i]) )
-        for i in range(len(wnMw)):
-            if wnMw[i] in wnAssim:
-                plotMapHist(cLat, cLon,\
-                    cMw[i,:],'Brightness Temperature Wavenumber {} '.format(wnMw[i])+'cm$^{-1}$', 'map_control_{0:08.3f}'.format(wnMw[i]) )
-        for i in range(len(wnSw)):
-            if wnSw[i] in wnAssim:
-                plotMapHist(cLat, cLon,\
-                    cSw[i,:],'Brightness Temperature Wavenumber {} '.format(wnSw[i])+'cm$^{-1}$', 'map_control_{0:08.3f}'.format(wnSw[i]) )
-        
-
-
 def readSdrBufr ( fname ):
     rad, times, lat, lon = bufr_decode( fname )
     if (rad.shape[0] == 1305):
@@ -263,6 +253,6 @@ def readSdrBufr ( fname ):
     return LW, MW, SW, np.asarray(times), np.asarray(lat), np.asarray(lon), wnLw, wnMw, wnSw 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser( description = ".")
-    parser.add_argument('--cntl', help = "input path where h5 are stored.", required = True, dest = 'cntl' )
+    parser.add_argument('--bufr', help = "input path where bufr are stored.", required = True, dest = 'bufr' )
     a = parser.parse_args()
-    go (a.cntl)  
+    main (a.bufr)  
