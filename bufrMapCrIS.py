@@ -39,15 +39,15 @@ def main(bufrPath):
         for i in range(len(wnLw)):
             if wnLw[i] in wnAssim:
                 plotMapHist(cLat, cLon,\
-                    cLw[i,:],'Brightness Temperature Wavenumber {} '.format(wnLw[i])+'cm$^{-1}$', 'map_control_{0:08.3f}'.format(wnLw[i]) )
+                    cLw[i,:],'Brightness Temperature Wavenumber {} '.format(wnLw[i])+'cm$^{-1}$', 'CrIS_map_bufr_{0:08.3f}'.format(wnLw[i]) )
         for i in range(len(wnMw)):
             if wnMw[i] in wnAssim:
                 plotMapHist(cLat, cLon,\
-                    cMw[i,:],'Brightness Temperature Wavenumber {} '.format(wnMw[i])+'cm$^{-1}$', 'map_control_{0:08.3f}'.format(wnMw[i]) )
+                    cMw[i,:],'Brightness Temperature Wavenumber {} '.format(wnMw[i])+'cm$^{-1}$', 'CrIS_map_bufr_{0:08.3f}'.format(wnMw[i]) )
         for i in range(len(wnSw)):
             if wnSw[i] in wnAssim:
                 plotMapHist(cLat, cLon,\
-                    cSw[i,:],'Brightness Temperature Wavenumber {} '.format(wnSw[i])+'cm$^{-1}$', 'map_control_{0:08.3f}'.format(wnSw[i]) )
+                    cSw[i,:],'Brightness Temperature Wavenumber {} '.format(wnSw[i])+'cm$^{-1}$', 'CrIS_map_bufr_{0:08.3f}'.format(wnSw[i]) )
         
 
 def bufr_decode(input_file):
